@@ -1,0 +1,28 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    .full-page{
+        height: 100vh;
+        width: 100%;
+        overflow-y: scroll;
+        scroll-snap-type: y mandatory;
+
+        .main-page,
+        .guitar-page,
+        .pedal-page{
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 1px solid #CCC;
+            scroll-snap-align: start;
+
+            h1{
+                color: white;
+                font-size: 60px;
+            }
+        }
+    }
+}

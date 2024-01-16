@@ -1,0 +1,26 @@
+.product-container{
+    display: flex;
+    width: 100%;
+    max-width: 750px;
+    padding: 40px;
+    border-radius: 25px;
+    gap: 10px;
+    background-color: white;
+
+    .product-info{
+        display: flex;
+        flex-direction: column;
+        color: black;
+        gap: 10px;
+
+        h3{
+            color: gold;
+        }
+
+    }
+    img{
+        height: 500px;
+        border: 1px solid;
+        border-radius: 25px;
+    }
+}

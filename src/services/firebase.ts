@@ -27,6 +27,8 @@ interface Product{
   price:number,
   imagePaths:string,
   imageUrl?:string,
+  audioPaths:string,
+  audioUrls?:string,
   quantity:number,
   specifications:{
     body:string,
@@ -53,6 +55,18 @@ export async function getProducts(): Promise<Product[]> {
       }
     } else {
       console.error(`Invalid imagePaths for product ${productData.id}`);
+    }
+
+    if (productData.audioPaths && typeof productData.audioPaths === 'string') {
+      const audioPath = productData.audioPaths;
+  
+      try {
+        productData.audioUrls = await getDownloadURL(ref(storage, audioPath));
+      } catch (error) {
+        console.error(`Error fetching audio URL for product ${productData.id}:`, error);
+      }
+    } else {
+      console.error(`Invalid audioPaths for product ${productData.id}`, productData.audioPaths);
     }
 
     return productData;

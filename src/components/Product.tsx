@@ -1,6 +1,7 @@
 import { DocumentData } from "firebase/firestore"
 import { useEffect, useState } from "react"
 import { getProducts } from "../services/firebase"
+import "../styles/components/product/product.style.scss"
 
 interface ProductProps{
   productName?:string
@@ -35,17 +36,21 @@ export const Product: React.FC<ProductProps> = ({ productName }) => {
   }, [products, productName]);
 
   return (
-    <div>
+    <div className="product-container">
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
       {!loading && !error && !selectedProduct && <p>No product selected</p>}
       {!loading && !error && selectedProduct && (
         <>
-          <div>
+          <div className="product-info">
             <h3>{selectedProduct.name}</h3>
             <p>Beskrivning: <br />{selectedProduct.description}</p>
+            <audio controls>
+              <source src={selectedProduct.audioUrls} type="audio/mp4"/>
+            </audio>
           </div>
-          <img style={{ height: 500 }} src={selectedProduct.imageUrl} alt={selectedProduct.name} />
+          <img className="product-image" src={selectedProduct.imageUrl} alt={selectedProduct.name} />
+
         </>
       )}
     </div>
