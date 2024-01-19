@@ -21,10 +21,11 @@ const db = getFirestore(app)
 
 const storage = getStorage(app)
 
-interface Product{
+export interface Product{
   id:string,
   name:string,
   price:number,
+  description:string,
   imagePaths:string,
   imageUrl?:string,
   audioPaths:string,

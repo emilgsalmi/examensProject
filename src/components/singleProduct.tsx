@@ -1,17 +1,21 @@
 import { DocumentData } from "firebase/firestore"
 import { useEffect, useState } from "react"
 import { getProducts } from "../services/firebase"
-import "../styles/components/product/product.style.scss"
+import "../styles/components/product/singleProduct.style.scss"
+import { useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 
-interface ProductProps{
-  productName?:string
+ export interface ProductProps{
+  productName?:string,
+  name?:string
 }
 
-export const Product: React.FC<ProductProps> = ({ productName }) => {
+export const SingleProduct: React.FC<ProductProps> = ({ productName }) => {
   const [products, setProducts] = useState<DocumentData[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedProduct, setSelectedProduct] = useState<DocumentData | null>(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -45,9 +49,14 @@ export const Product: React.FC<ProductProps> = ({ productName }) => {
           <div className="product-info">
             <h3>{selectedProduct.name}</h3>
             <p>Beskrivning: <br />{selectedProduct.description}</p>
-            <audio controls>
+            
+            <Link to={`/products/${selectedProduct.name}`} className="to-product">
+            Till Produkten
+            </Link>
+
+            {/* <audio controls>
               <source src={selectedProduct.audioUrls} type="audio/mp4"/>
-            </audio>
+            </audio> */}
           </div>
           <img className="product-image" src={selectedProduct.imageUrl} alt={selectedProduct.name} />
 

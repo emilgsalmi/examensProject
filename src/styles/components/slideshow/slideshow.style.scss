@@ -1,0 +1,29 @@
+.slideshow {
+  position: relative;
+  max-width: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+
+  #prevSlide, 
+  #nextSlide
+  {
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  #prevSlide:first-child {
+    left: -300px;
+  }
+
+  #nextSlide:last-child {
+    right: -300px;
+  }
+}
+
+  
