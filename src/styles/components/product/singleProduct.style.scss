@@ -6,25 +6,67 @@
     border-radius: 25px;
     gap: 10px;
     background-color: white;
+    
+    @media (max-width:760px) {
+        flex-direction: column;
+        gap: 30px;
+    }
 
-    .product-info{
+    .product-wrapper{
         display: flex;
         flex-direction: column;
-        color: black;
-        gap: 10px;
+        justify-content: space-between;        
 
-        h3{
-            color: gold;
+        @media (max-width:760px) {
+            gap: 30px;
         }
 
-        .to-product{
-            position: relative;
-        }
+        .product-info{
+            display: flex;
+            flex-direction: column;
+            color: black;
+            gap: 10px;
+            
+            @media (max-width:760px) {            
+                gap: 30px;
+            }
 
+            h3{
+                color: gold;
+            }    
+        }
+        .button {
+            width: 140px;
+            height: 45px;
+            font-size: 12px;
+            letter-spacing: 2.5px;
+            color: #000;
+            background-color: #fff;
+            border: none;
+            border-radius: 45px;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease 0s;
+            cursor: pointer;
+            outline: none;
+
+            .button:hover {
+                background-color: #2EE59D;
+                box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+                color: #fff;
+                transform: translateY(-7px);
+            }
+        }
     }
     img{
         height: 500px;
-        border: 1px solid;
+        border: none;
+        box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
         border-radius: 25px;
+        object-fit: contain;
+        
+        @media (max-width:762px){
+            height: 400px;
+        }
     }
+
 }

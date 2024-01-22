@@ -23,6 +23,12 @@
                 color: white;
                 font-size: 60px;
                 text-decoration: underline;
+                @media (max-width:760px) {
+                    font-size: 40px;
+                }
+                @media (max-width:360px) {
+                    font-size: 20px;
+                }
             }
 
             .guitar-page-container{

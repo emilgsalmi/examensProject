@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { getProducts, Product } from '../services/firebase';
 import "../styles/ProductPage/productpage.style.scss"
+import { useNavigate } from 'react-router-dom';
 
 export const ProductsPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -24,22 +26,12 @@ export const ProductsPage: React.FC = () => {
             alla produkter
         </h2>
       {products.map((product) => (
-          <div style={{width:"80%"}}>
+          <div style={{width:"80%"}} onClick={() => navigate(`/products/${product.name}`)}>
             <div className='products-list-wrapper'>
                 <div className='productInfo'>
                     <h1>{product.name}</h1>
                     <p> Pris: {product.price}kr</p>
                     <p>Beskrivning: <br/>{product.description}</p>
-                    <div className='info-accordion'>
-                        Mer info
-                        <div className="accordion-content">
-                            <p>Body: {product.specifications.body}</p>
-                            <p>Fretboard: {product.specifications.fretboard}</p>
-                            <p>Neck: {product.specifications.neck}</p>
-                            <p>Pickups: {product.specifications.pickups}</p>
-                        </div>
-                    </div>
-
                 </div>
                 <img src={product.imageUrl} alt={product.name} />
             </div>

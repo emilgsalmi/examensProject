@@ -6,9 +6,16 @@
   align-items: center;
   gap: 30px;
 
+  @media (max-width:462px){ 
+    gap: 12px;
+    padding: 15px;
+  }
+  
+
   #prevSlide, 
   #nextSlide
   {
+    color: white;
     top: 50%;
     transform: translateY(-50%);
     background: transparent;

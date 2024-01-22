@@ -3,7 +3,6 @@ import { useEffect, useState } from "react"
 import { getProducts } from "../services/firebase"
 import "../styles/components/product/singleProduct.style.scss"
 import { useNavigate } from "react-router-dom"
-import { Link } from "react-router-dom"
 
  export interface ProductProps{
   productName?:string,
@@ -46,20 +45,14 @@ export const SingleProduct: React.FC<ProductProps> = ({ productName }) => {
       {!loading && !error && !selectedProduct && <p>No product selected</p>}
       {!loading && !error && selectedProduct && (
         <>
-          <div className="product-info">
-            <h3>{selectedProduct.name}</h3>
-            <p>Beskrivning: <br />{selectedProduct.description}</p>
-            
-            <Link to={`/products/${selectedProduct.name}`} className="to-product">
-            Till Produkten
-            </Link>
-
-            {/* <audio controls>
-              <source src={selectedProduct.audioUrls} type="audio/mp4"/>
-            </audio> */}
+          <div className="product-wrapper">
+            <div className="product-info">
+              <h3>{selectedProduct.name}</h3>
+              <p>Beskrivning: <br />{selectedProduct.description}</p>
+            </div>
+              <button onClick={() => navigate(`/products/${selectedProduct.name}`)} className="button">Till produkt</button>
           </div>
-          <img className="product-image" src={selectedProduct.imageUrl} alt={selectedProduct.name} />
-
+            <img className="product-image" src={selectedProduct.imageUrl} alt={selectedProduct.name} />
         </>
       )}
     </div>
