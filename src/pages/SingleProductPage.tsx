@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getProducts } from '../services/firebase';
 import { DocumentData } from 'firebase/firestore';
 import "../styles/SingleProduct/product.style.scss"
@@ -8,6 +8,7 @@ export const SingleProductPage: React.FC = () => {
   const { productName } = useParams();
   const [product, setProduct] = useState<DocumentData | null>(null);
   const [openAccordion, setOpenAccordion ] = useState<boolean>(false)
+  const navigate = useNavigate()
 
 
   useEffect(() => {
@@ -32,17 +33,19 @@ export const SingleProductPage: React.FC = () => {
     <div>
       {product ? (
         <div className='single-product-container'>
+            <button className='button' onClick={() => navigate(`/products`)}>
+                Tillbaka
+            </button>
             <div className='single-product-wrapper'>
                 <div className='single-product-info'>
                     <div className='info-wrapper'>
                         <h2>{product.name}</h2>
-                        <p>Pris: {product.price}</p>
-                        <p>Beskrivning: {product.description}</p>
+                        <p>Pris: {product.price}kr</p>
+                        <p>Beskrivning: <br /> {product.description}</p>
                         <div className='spec-accordion' onClick={toogleAccordion}>
-                            Mer info:
+                            <p>Specifikationer:</p>
                             {openAccordion && (
                                 <div className='accordion-content'>
-                                <p>Specifikationer:</p>
                                 <p>Body: {product.specifications.body}</p>
                                 <p>Fretboard: {product.specifications.fretboard}</p>
                                 <p>Neck: {product.specifications.neck}</p>
@@ -54,7 +57,7 @@ export const SingleProductPage: React.FC = () => {
                             <source src={product.audioUrls} type='audio/mp4'/>
                         </audio>
                     </div>
-                    <button className="button">KÖP</button>
+                    <button className="button">Lägg till i varukorgen</button>
                 </div>
                 <img className='single-product-image' src={product.imageUrl} alt={product.name} />
             </div>

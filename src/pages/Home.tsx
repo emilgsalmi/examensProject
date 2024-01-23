@@ -18,7 +18,6 @@ export const Home: React.FC = () => {
       <div className="full-page">
         <section className="main-page" style={{ background: `url(${mainBackground})`, backgroundSize: "cover" }}>
           <div className="main-content">
-            <img src="" alt="" />
             <h1>emils gitarr butik</h1>
           </div>
         </section>

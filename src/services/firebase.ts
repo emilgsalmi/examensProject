@@ -40,7 +40,7 @@ export interface Product{
 }
 
 export async function getProducts(): Promise<Product[]> {
-  const productRef = collection(db, 'products');
+  const productRef = collection(db, 'guitars');
   const productSnapshot = await getDocs(productRef);
 
   const productList: Promise<Product>[] = productSnapshot.docs.map(async (doc) => {
