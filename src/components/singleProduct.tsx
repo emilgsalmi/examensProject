@@ -1,40 +1,43 @@
-import { DocumentData } from "firebase/firestore"
-import { useEffect, useState } from "react"
-import { getProducts } from "../services/firebase"
-import "../styles/components/product/singleProduct.style.scss"
-import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react";
+import { getGuitars, getPedals, Product } from "../services/firebase";
+import "../styles/components/product/singleProduct.style.scss";
+import { useNavigate } from "react-router-dom";
 
- export interface ProductProps{
-  productName?:string,
-  name?:string
+export interface SingleProductProps {
+  productName?: string;
 }
 
-export const SingleProduct: React.FC<ProductProps> = ({ productName }) => {
-  const [products, setProducts] = useState<DocumentData[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
-  const [error, setError] = useState<string | null>(null)
-  const [selectedProduct, setSelectedProduct] = useState<DocumentData | null>(null)
-  const navigate = useNavigate()
+export const SingleProduct: React.FC<SingleProductProps> = ({ productName }) => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const productList = await getProducts()
-        setProducts(productList)
+        const guitars = await getGuitars();
+        const pedals = await getPedals();
+
+        // Combine the lists of guitars and pedals
+        const allProducts = [...guitars, ...pedals];
+        
+        setProducts(allProducts);
       } catch (error) {
-        console.error('Error fetching products', error)
-        setError('Error fetching products')
+        console.error('Error fetching products', error);
+        setError('Error fetching products');
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
     fetchProducts();
-  }, []) // Fetch products when the component mounts
+  }, []); // Fetch products when the component mounts
 
   useEffect(() => {
-    // Update selectedProduct when productId changes
-    const productToDisplay = products.find((product) => product.name === productName)
+    // Update selectedProduct when productName changes
+    const productToDisplay = products.find((product) => product.name === productName);
     setSelectedProduct(productToDisplay || null);
   }, [products, productName]);
 
@@ -50,12 +53,11 @@ export const SingleProduct: React.FC<ProductProps> = ({ productName }) => {
               <h3>{selectedProduct.name}</h3>
               <p>Beskrivning: <br />{selectedProduct.description}</p>
             </div>
-              <button onClick={() => navigate(`/products/${selectedProduct.name}`)} className="button">Till produkt</button>
+            <button onClick={() => navigate(`/products/${selectedProduct.name}`)} className="button">Till produkt</button>
           </div>
-            <img className="product-image" src={selectedProduct.imageUrl} alt={selectedProduct.name} />
+          <img className="product-image" src={selectedProduct.imageUrl} alt={selectedProduct.name} />
         </>
       )}
     </div>
-  )
-}
-
+  );
+};

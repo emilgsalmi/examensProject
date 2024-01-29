@@ -1,5 +1,5 @@
 import "../styles/About/about.style.scss"
-import TestImage from "../assets/pexels-rene-asmussen-1539788.jpg"
+import TestImage from "../assets/guitar-pick (1).png"
 
 export const About = () => {
 
@@ -14,9 +14,6 @@ export const About = () => {
                         Vi förstår att varje gitarrist har sin egen unika stil och smak. Därför strävar vi efter att erbjuda ett brett utbud av gitarrer från olika märken och modeller, så att du kan hitta den som passar just dig. Vårt kunniga team av musikentusiaster finns alltid här för att ge råd och vägledning, oavsett om du är på jakt efter din första gitarr eller letar efter nästa tillskott till din samling.
                         Utöver att erbjuda ett omfattande utbud av gitarrer och tillbehör, värnar vi om att skapa en inspirerande atmosfär där musikälskare kan samlas och dela sina passioner. Vi anordnar regelbundet evenemang, workshops och jam sessions för att skapa en gemenskap av likasinnade individer som delar vår kärlek till gitarrmusik.
                         Vi är stolta över att vara en del av Stockholms musikscen och ser fram emot att fortsätta växa och utvecklas med våra kunder. Oavsett om du är en nybörjare som precis börjat utforska musikens värld eller en erfaren gitarrist som söker det perfekta instrumentet, är Emils Gitarr Butik platsen där dina musikaliska drömmar blir verklighet. Kom och upplev skillnaden hos oss – där varje ackord ringer med kvalitet och passion.</p>
-                    </div>
-                    <div>
-                        <img src={TestImage} alt="test" />
                     </div>
                 </div>
 

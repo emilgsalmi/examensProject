@@ -1,6 +1,15 @@
 import { initializeApp } from 'firebase/app';
 import { getDownloadURL, getStorage, ref } from 'firebase/storage';
-import { collection, getFirestore, getDocs } from 'firebase/firestore/lite';
+import { 
+  collection, 
+  getFirestore, 
+  getDocs, 
+  doc, 
+  updateDoc, 
+  addDoc, 
+  getDoc,
+  setDoc 
+} from 'firebase/firestore/lite';
 
 
 // Your web app's Firebase configuration
@@ -31,6 +40,7 @@ export interface Product{
   audioPaths:string,
   audioUrls?:string,
   quantity:number,
+  isSold: boolean,
   specifications:{
     body:string,
     fretboard:string,
@@ -39,7 +49,8 @@ export interface Product{
   }
 }
 
-export async function getProducts(): Promise<Product[]> {
+//* GET GUITARS LIST
+export async function getGuitars(): Promise<Product[]> {
   const productRef = collection(db, 'guitars');
   const productSnapshot = await getDocs(productRef);
 
@@ -60,7 +71,7 @@ export async function getProducts(): Promise<Product[]> {
 
     if (productData.audioPaths && typeof productData.audioPaths === 'string') {
       const audioPath = productData.audioPaths;
-  
+
       try {
         productData.audioUrls = await getDownloadURL(ref(storage, audioPath));
       } catch (error) {
@@ -74,7 +85,82 @@ export async function getProducts(): Promise<Product[]> {
   });
 
   const resolvedProductList = await Promise.all(productList);
-  console.log(resolvedProductList);
 
   return resolvedProductList;
 }
+
+//* GET PEDALS LIST
+export async function getPedals(): Promise<Product[]> {
+  const productRef = collection(db, 'pedals');
+  const productSnapshot = await getDocs(productRef);
+
+  const productList: Promise<Product>[] = productSnapshot.docs.map(async (doc) => {
+    const productData = doc.data() as Product;
+
+    if (productData.imagePaths && typeof productData.imagePaths === 'string') {
+      const imagePaths = productData.imagePaths;
+
+      try {
+        productData.imageUrl = await getDownloadURL(ref(storage, imagePaths));
+      } catch (error) {
+        console.error(`Error fetching image URL for product ${productData.id}:`, error);
+      }
+    } else {
+      console.error(`Invalid imagePaths for product ${productData.id}`);
+    }
+
+    if (productData.audioPaths && typeof productData.audioPaths === 'string') {
+      const audioPath = productData.audioPaths;
+
+      try {
+        productData.audioUrls = await getDownloadURL(ref(storage, audioPath));
+      } catch (error) {
+        console.error(`Error fetching audio URL for product ${productData.id}:`, error);
+      }
+    } 
+
+    return productData;
+  });
+
+  const resolvedProductList = await Promise.all(productList);
+
+  return resolvedProductList;
+}
+
+export async function markGuitarAsSold(productId: string): Promise<void> {
+  const productRef = doc(db, 'guitars', productId);
+
+  try {
+    await updateDoc(productRef, { isSold: true });
+    console.log('Gitarr är markerad som såld!',`${productId}`);
+  } catch (error) {
+    console.error('Misslyckades med att markera gitarr som såld:', error, `${productId}`);
+    throw error;
+  }
+}
+
+export async function markPedalAsSold(productId:string): Promise<void> {
+  const productRef = doc(db, 'pedals', productId);
+
+  try {
+    await updateDoc(productRef, { isSold: true });
+    console.log('Pedal är markerad som såld!',`${productId}`);
+  } catch (error) {
+    console.error('Misslyckades med att markera pedal som såld:', error, `${productId}`);
+    throw error;
+  }
+}
+
+export async function addPaymentDetails(paymentDetails:any): Promise<void>{
+  try{
+    const orderCollection = collection(db,'orders')
+    await addDoc(orderCollection, paymentDetails)
+  } catch(error){
+    console.log('Misslyckades med att lägga till betalningsinformation')
+    throw error
+  }
+}
+
+
+
+

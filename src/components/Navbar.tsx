@@ -1,4 +1,3 @@
-/* import '../styles/Header/header.style.scss' */
 import { useRef, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import "../styles/components/navbar/navbar.style.scss"
@@ -15,29 +14,33 @@ export const Navbar = () => {
     
     useEffect(() => {
         const handleOutsideClick = (event: MouseEvent) => {
-          if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-            setBurgerClass("burger-bar unclicked");
-            setMenuClass("menu hidden");
-            setIsMenuClicked(false);
-          }
+            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+                closeMenu();
+            }
         };
-        document.addEventListener('click', handleOutsideClick);
-    
+
+        document.addEventListener('mousedown', handleOutsideClick);
+
         return () => {
-          document.removeEventListener('click', handleOutsideClick);
+            document.removeEventListener('mousedown', handleOutsideClick);
         };
-      }, [menuRef]);
+    }, [menuRef]);
+    
 
     const updateMenu = () => {
-        if(!isMenuClicked) {
-            setBurgerClass("burger-bar clicked")
-            setMenuClass("menu visible")
+        if (!isMenuClicked) {
+            setBurgerClass("burger-bar clicked");
+            setMenuClass("menu visible");
+        } else {
+            closeMenu()
         }
-        else{
-            setBurgerClass("burger-bar unclicked")
-            setMenuClass("menu hidden")
-        }
-        setIsMenuClicked(!isMenuClicked)
+        setIsMenuClicked(!isMenuClicked);
+    };
+
+    const closeMenu = () => {
+        setBurgerClass("burger-bar unclicked")
+        setMenuClass("menu hidden")
+        setIsMenuClicked(false)
     }
 
     return(
@@ -50,13 +53,14 @@ export const Navbar = () => {
                 </div>
             </nav>
 
-            <div className={menu_class}>
+            <div className={menu_class} ref={menuRef}>
                 <div className='menu-container'>
                     <div className='wrapper1'>
                         <div className='links'>
-                            <Link to="/">Hem</Link>
-                            <Link to="/products">Produkter</Link>
-                            <Link to="/about">Om Oss</Link>
+                            <Link onClick={closeMenu} to="/">Hem</Link>
+                            <Link onClick={closeMenu} to="/products">Produkter</Link>
+                            <Link onClick={closeMenu} to="/about">Om Oss</Link>
+                            <Link onClick={closeMenu} to="/cart">Varukorg</Link>
                         </div>
                     </div>
                     <div className='wrapper2'>
@@ -71,4 +75,3 @@ export const Navbar = () => {
         </div>
     )
 }
-

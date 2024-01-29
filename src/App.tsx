@@ -5,6 +5,9 @@ import { Home } from './pages/Home'
 import { ProductsPage } from './pages/ProductsPage'
 import { About } from './pages/About'
 import { SingleProductPage } from './pages/SingleProductPage'
+import { CartPage } from './pages/CartPage'
+import { CartProvider } from './contexts/CartContext'
+
 
 function App() {
   
@@ -14,12 +17,15 @@ function App() {
         <Navbar />
       </header>
       <main>
-        <Routes>
-          <Route path='/' element={<Home />}/>
-          <Route path='/products' element={<ProductsPage />}/>
-          <Route path='products/:productName' element={<SingleProductPage />}></Route>
-          <Route path='/about' element={<About />}/>
-        </Routes>
+        <CartProvider>
+          <Routes>          
+            <Route path='/' element={<Home />}/>
+            <Route path='/products' element={<ProductsPage />}/>
+            <Route path='products/:productName' element={<SingleProductPage />}></Route>
+            <Route path='/about' element={<About />}/>
+            <Route path='/cart' element={<CartPage />} />
+          </Routes>
+        </CartProvider>
       </main>
     </>
   )
