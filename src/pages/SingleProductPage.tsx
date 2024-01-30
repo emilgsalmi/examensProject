@@ -42,7 +42,6 @@ const handleAddToCart = () => {
     if (product) {
         const itemsToAdd: CartItem[] = [{product, quantity: 1,}]
       addToCart(itemsToAdd);
-      navigate('/cart'); // Navigate to the cart page
     }
   };
   

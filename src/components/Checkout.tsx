@@ -1,9 +1,10 @@
 // Checkout.tsx
 import React, { useState } from 'react'
-import { CartItem, useCart } from '../contexts/CartContext'
+import { useCart } from '../contexts/CartContext'
 import { CheckoutService } from '../services/CheckoutService'
-import { addPaymentDetails, markGuitarAsSold, markPedalAsSold } from '../services/firebase'
+import { addPaymentDetails } from '../services/firebase'
 import "../styles/components/checkout/checkout.style.scss"
+import { useNavigate } from 'react-router-dom'
 
 
 interface CheckoutSectionProps {
@@ -12,6 +13,7 @@ interface CheckoutSectionProps {
 
 export const Checkout: React.FC<CheckoutSectionProps> = ({ totalSum }) => {
   const { cart } = useCart();
+  const navigate = useNavigate()
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -23,6 +25,7 @@ export const Checkout: React.FC<CheckoutSectionProps> = ({ totalSum }) => {
   const [expiryDate, setExpiryDate] = useState('');
   const [cvv, setCVV] = useState('');
 
+  const { emptyCart } = useCart()
   
   const handleCheckout = async () => {
     // Skapa ett objekt med betalningsinformationen
@@ -51,7 +54,8 @@ export const Checkout: React.FC<CheckoutSectionProps> = ({ totalSum }) => {
     if (result.success){
         try{
             await addPaymentDetails(paymentDetails)
-            
+            navigate('/conformation')
+            emptyCart()
             console.log('Betalningsinformationen har lagts till i databasen');
 
         } catch(error){
@@ -76,7 +80,7 @@ export const Checkout: React.FC<CheckoutSectionProps> = ({ totalSum }) => {
   
   return (
     <div className="checkout-section">
-      <h3>Checkout</h3>
+        <h3>Checkout</h3>
       <form className='checkout-wrapper'>
         <div className='info-details'>
             <h3>Kunduppgifter</h3>

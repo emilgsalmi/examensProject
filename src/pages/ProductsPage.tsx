@@ -33,17 +33,19 @@ export const ProductsPage: React.FC = () => {
         <h2 className='product-list-title' style={{textDecoration:"underline"}}>
             alla produkter
         </h2>
+        <div className='wrapper' style={{width:"100%"}}>
         {visibleProducts.map((product) => (
-          <div style={{width:"80%"}} onClick={() => navigate(`/products/${product.name}`)}>
-            <div className='products-list-wrapper'>
+          <div className='products-list-wrapper' onClick={() => navigate(`/products/${product.name}`)}>
+            <div className='products-list'>
                 <div className='productInfo'>
-                    <h1>{product.name}</h1>
+                    <h1 style={{fontSize:"20px"}}>{product.name}</h1>
                     <p> Pris: {product.price}kr</p>
                 </div>
                 <img src={product.imageUrl} alt={product.name} />
             </div>
         </div>
       ))} 
+      </div>
     </div>
   );
 };

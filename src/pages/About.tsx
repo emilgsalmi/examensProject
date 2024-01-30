@@ -1,5 +1,5 @@
 import "../styles/About/about.style.scss"
-import TestImage from "../assets/guitar-pick (1).png"
+import { GoogleMapComponent } from "../components/GoogleMaps"
 
 export const About = () => {
 
@@ -22,8 +22,18 @@ export const About = () => {
             <div className="about-page-2">
                 <div className="about-wrapper-2">
                     <div className="about-inner-wrapper-2">
-                        <p>TEST</p>
-                        <div>COMPONENT</div>
+                        <div className="info-wrapper">
+                        <p>Ni hittar oss på Birkagatan 2 i Stockholm <br />
+                            <br />
+                            Våra öppetider varigerar så ring innan tack
+                        </p>
+                        <p>
+                            mail: emil@test.com <br />
+                            <br />
+                            Mobil: 070-133 74 20
+                        </p>
+                        </div>
+                        <GoogleMapComponent address="Birkagatan 2, Stockholm"/>
                     </div>
                 </div>
             </div>

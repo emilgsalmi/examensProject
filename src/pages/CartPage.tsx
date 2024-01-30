@@ -26,42 +26,43 @@ export const CartPage: React.FC = () => {
 
   return (
     <div className="cart-page">
-    <div className='icon-wrapper'>
-            <FontAwesomeIcon icon={faArrowLeft} onClick={() => navigate(`/products`)} />
-          </div>
-      <h2>Shopping Cart</h2>
-      <div className='cart-container'>
-      {cart.length === 0 ? (
-        <p>Your cart is empty.</p>
-      ) : (
-        <div>
-          {cart.map((cartItem) => (
-            <div className='cart-wrapper' key={cartItem.product.id}>
-              <div className='cart-product'>
-                <p>{cartItem.product.name}</p>
-                <p>Price: {cartItem.product.price}kr</p>
-                <p>Quantity: {cartItem.quantity}</p>
-                <button className='button' onClick={() => handleRemoveFromCart(cartItem.product.id)}>
-                  Remove from Cart
-                </button>
-              </div>
-              <div className='image-wrapper'>
-                <img style={{height:"200px", borderRadius:"20px"}} src={cartItem.product.imageUrl} alt="" />
-              </div>
+        <div className='icon-wrapper'>
+                <FontAwesomeIcon icon={faArrowLeft} onClick={() => navigate(`/products`)} />
+        </div>
+        <h2>Shopping Cart</h2>
+        <div className='cart-container'>
+        {cart.length === 0 ? (
+            <p>Your cart is empty.</p>
+        ) : (
+            <div style={{display:"flex", gap:"40px"}}>
+            {cart.map((cartItem) => (
+                <div className='cart-wrapper' key={cartItem.product.id}>
+                <div className='cart-product'>
+                    <p>{cartItem.product.name}</p>
+                    <p>Price: {cartItem.product.price}kr</p>
+                    <p>Quantity: {cartItem.quantity}</p>
+                    <button className='button' onClick={() => handleRemoveFromCart(cartItem.product.id)}>
+                    Remove from Cart
+                    </button>
+                </div>
+                <div className='image-wrapper'>
+                    <img style={{height:"200px", borderRadius:"20px"}} src={cartItem.product.imageUrl} alt="" />
+                </div>
+                </div>
+            ))}
             </div>
-          ))}
-          <p>Total Sum: {totalSum}kr</p>
+        )}
+        <p>Total Sum: {totalSum}kr</p>
+        </div>
+
+        {cart.length > 0 && (
+        <div className='checkout-accordion'>
+          <button className='button' onClick={toogleCheckout}>
+            {isCheckoutOpen ? 'Hide Checkout' : 'Show Checkout'}
+          </button>
+          {isCheckoutOpen && <Checkout totalSum={totalSum}/>}
         </div>
       )}
-      </div>
-
-
-        <div className='checkout-accordion'>
-            <button className='button' onClick={toogleCheckout}>
-                {isCheckoutOpen ? 'Hide Checkout' : 'Show Checkout'}
-            </button>
-            {isCheckoutOpen && <Checkout totalSum={totalSum}/>}
-        </div>
     </div>
   );
 };

@@ -7,6 +7,7 @@ import { About } from './pages/About'
 import { SingleProductPage } from './pages/SingleProductPage'
 import { CartPage } from './pages/CartPage'
 import { CartProvider } from './contexts/CartContext'
+import { ConfirmationPage } from './components/Conformation'
 
 
 function App() {
@@ -21,9 +22,10 @@ function App() {
           <Routes>          
             <Route path='/' element={<Home />}/>
             <Route path='/products' element={<ProductsPage />}/>
-            <Route path='products/:productName' element={<SingleProductPage />}></Route>
+            <Route path='products/:productName' element={<SingleProductPage />} />
             <Route path='/about' element={<About />}/>
             <Route path='/cart' element={<CartPage />} />
+            <Route path='/conformation' element={<ConfirmationPage />}/>
           </Routes>
         </CartProvider>
       </main>

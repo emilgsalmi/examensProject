@@ -127,6 +127,18 @@ export async function getPedals(): Promise<Product[]> {
   return resolvedProductList;
 }
 
+
+export async function addPaymentDetails(paymentDetails:any): Promise<void>{
+  try{
+    const orderCollection = collection(db,'orders')
+    await addDoc(orderCollection, paymentDetails)
+  } catch(error){
+    console.log('Misslyckades med att lägga till betalningsinformation')
+    throw error
+  }
+}
+
+//! kommer nog raderas!
 export async function markGuitarAsSold(productId: string): Promise<void> {
   const productRef = doc(db, 'guitars', productId);
 
@@ -150,17 +162,6 @@ export async function markPedalAsSold(productId:string): Promise<void> {
     throw error;
   }
 }
-
-export async function addPaymentDetails(paymentDetails:any): Promise<void>{
-  try{
-    const orderCollection = collection(db,'orders')
-    await addDoc(orderCollection, paymentDetails)
-  } catch(error){
-    console.log('Misslyckades med att lägga till betalningsinformation')
-    throw error
-  }
-}
-
 
 
 

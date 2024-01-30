@@ -58,13 +58,32 @@
 
             .about-inner-wrapper-2{
                 display: flex;
-                flex-direction: column;
-                width: 50%;
+                flex-direction: row;
                 gap: 20px;
-                max-height: 450px;
+                max-height: 450px; 
+                border-bottom: 2px solid black;
+                padding: 20px;
 
-                img{
-                    width: fit-content;
+                @media (max-width:760px) {
+                    flex-direction: column;
+                    max-height: 550px;
+                }            
+
+                .info-wrapper{
+                    width: 35%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    gap: 20px;
+
+                    p{
+                        padding: 10px;
+                    }
+                    
+                    @media (max-width:760px) {
+                      width: auto;
+                    }
+
                 }
             }
 
