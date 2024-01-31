@@ -39,6 +39,7 @@ export interface Product{
   audioUrls?:string,
   quantity:number,
   isSold: boolean,
+  type:"GUITAR" | "PEDAL",
   specifications:{
     body:string,
     fretboard:string,
@@ -54,6 +55,8 @@ export async function getGuitars(): Promise<Product[]> {
 
   const productList: Promise<Product>[] = productSnapshot.docs.map(async (doc) => {
     const productData = doc.data() as Product;
+    productData.id = doc.id
+    productData.type = "GUITAR"
 
     if (productData.imagePaths && typeof productData.imagePaths === 'string') {
       const imagePaths = productData.imagePaths;
@@ -94,6 +97,8 @@ export async function getPedals(): Promise<Product[]> {
 
   const productList: Promise<Product>[] = productSnapshot.docs.map(async (doc) => {
     const productData = doc.data() as Product;
+    productData.id = doc.id
+    productData.type = "PEDAL"
 
     if (productData.imagePaths && typeof productData.imagePaths === 'string') {
       const imagePaths = productData.imagePaths;
@@ -136,7 +141,6 @@ export async function addPaymentDetails(paymentDetails:any): Promise<void>{
   }
 }
 
-//! kommer nog raderas!
 export async function markGuitarAsSold(productId: string): Promise<void> {
   const productRef = doc(db, 'guitars', productId);
 

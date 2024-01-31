@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { useCart } from '../contexts/CartContext'
 import { CheckoutService } from '../services/CheckoutService'
-import { addPaymentDetails } from '../services/firebase'
+import { addPaymentDetails, markGuitarAsSold, markPedalAsSold } from '../services/firebase'
 import "../styles/components/checkout/checkout.style.scss"
 import { useNavigate } from 'react-router-dom'
 
@@ -45,22 +45,31 @@ export const Checkout: React.FC<CheckoutSectionProps> = ({ totalSum }) => {
     };
 
     // Använd fake checkout-service för att simulera betalningen
-    const result = await CheckoutService.processPayment(paymentDetails);
+    const result = await CheckoutService.processPayment(paymentDetails)
 
     // Logga resultatet av den simulerade betalningen
-    console.log("Result of payment: ",result);
-    console.log("All info: ", paymentDetails);
+    console.log("Result of payment: ",result)
+    console.log("All info: ", paymentDetails)
     
     if (result.success){
         try{
             await addPaymentDetails(paymentDetails)
+            await Promise.all(cart.map(cartItem => {
+                const productId = cartItem.product.id
+                const type = cartItem.product.type
+                if(type === 'GUITAR') return markGuitarAsSold(productId)
+                if(type === 'PEDAL') return markPedalAsSold(productId)
+            }))
+            /* await Promise.all(cart.map(product => markGuitarAsSold(product.product.id)))
+            await Promise.all(cart.map(product => markPedalAsSold(product.product.id))) */
+
             navigate('/conformation')
             emptyCart()
-            console.log('Betalningsinformationen har lagts till i databasen');
+            console.log('Betalningsinformationen har lagts till i databasen')
 
         } catch(error){
-            console.error('Misslyckades med att markera gitarr som såld:', error);
-            console.log('Misslyckades att lägga till betalningsinformationen');
+            console.error('Misslyckades med att markera gitarr som såld:', error)
+            console.log('Misslyckades att lägga till betalningsinformationen')
         }
     }
 
@@ -73,8 +82,8 @@ export const Checkout: React.FC<CheckoutSectionProps> = ({ totalSum }) => {
     setPostalCode('')
     setCountry('')
     setCardNumber('')
-    setExpiryDate('');
-    setCVV('');
+    setExpiryDate('')
+    setCVV('')
   };
 
   
