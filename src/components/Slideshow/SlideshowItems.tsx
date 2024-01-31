@@ -1,9 +1,9 @@
 // SlideshowItem.tsx
 import React from 'react';
-import { SingleProduct, ProductProps } from '../singleProduct';
+import { SingleProduct, SingleProductProps } from '../singleProduct';
 
 interface SlideshowItemProps {
-  product: ProductProps;
+  product: SingleProductProps;
 }
 
 const SlideshowItem: React.FC<SlideshowItemProps> = ({ product }) => {

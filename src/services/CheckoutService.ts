@@ -20,7 +20,7 @@ export const CheckoutService = {
       const success = true;
   
       if (success) {
-        return { success: true, message: 'Betalningen lyckades!' };
+        return { success: true, message: 'Betalningen lyckades!', paymentDetails };
       } else {
         return { success: false, message: 'Betalningen misslyckades.' };
       }

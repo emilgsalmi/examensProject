@@ -1,27 +1,29 @@
 // SingleProductPage.tsx
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { getProducts } from '../services/firebase';
+import { getGuitars, getPedals } from '../services/firebase';
 import { SingleProduct } from '../components/singleProduct';
 import { DocumentData } from 'firebase/firestore';
 
 export const ShowProduct: React.FC = () => {
-  const { productName } = useParams();
   const [product, setProduct] = useState<DocumentData | null>(null);
 
   useEffect(() => {
-    const fetchProduct = async () => {
+    const fetchProducts = async () => {
       try {
-        const productList = await getProducts();
-        const selectedProduct = productList.find((product) => product.name === productName);
-        setProduct(selectedProduct || null);
+        const guitars = await getGuitars();
+        const pedals = await getPedals();
+
+        // Combine the lists of guitars and pedals
+        const allProducts = [...guitars, ...pedals];
+
+        setProduct(allProducts); 
       } catch (error) {
-        console.error('Error fetching product', error);
+        console.error('Error fetching products', error);
       }
     };
 
-    fetchProduct();
-  }, [productName]);
+    fetchProducts();
+  }, []);
 
   return (
     <div>

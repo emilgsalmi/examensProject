@@ -30,7 +30,9 @@ export const About = () => {
                         <p>
                             mail: emil@test.com <br />
                             <br />
-                            Mobil: 070-133 74 20
+                            Mobil: 070-133 74 20 <br />
+                            <br />
+                            Adress: Birkagatan 2
                         </p>
                         </div>
                         <GoogleMapComponent address="Birkagatan 2, Stockholm"/>

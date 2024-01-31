@@ -1,11 +1,11 @@
 // Slideshow.tsx
 import React, { useState } from 'react';
 import SlideshowItem from './SlideshowItems';
-import { ProductProps } from '../singleProduct';
+import { SingleProductProps } from '../singleProduct';
 import "../../styles/components/slideshow/slideshow.style.scss"
 
 interface SlideshowProps {
-  products: ProductProps[];
+  products:SingleProductProps[];
 }
 
 const Slideshow: React.FC<SlideshowProps> = ({ products }) => {

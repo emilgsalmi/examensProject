@@ -7,8 +7,6 @@ import {
   doc, 
   updateDoc, 
   addDoc, 
-  getDoc,
-  setDoc 
 } from 'firebase/firestore/lite';
 
 
