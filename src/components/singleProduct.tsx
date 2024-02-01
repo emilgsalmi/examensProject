@@ -1,53 +1,69 @@
-import { useEffect, useState } from "react";
-import { getGuitars, getPedals, Product } from "../services/firebase";
-import "../styles/components/product/singleProduct.style.scss";
-import { useNavigate } from "react-router-dom";
+// Importing React hooks and services
+import { useEffect, useState } from "react"
+import { getGuitars, getPedals, Product } from "../services/firebase"
+import "../styles/components/product/singleProduct.style.scss"
+import { useNavigate } from "react-router-dom"
 
+// Defining the props interface for SingleProduct component
 export interface SingleProductProps {
   productName?: string;
 }
 
+// SingleProduct component definition
 export const SingleProduct: React.FC<SingleProductProps> = ({ productName }) => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const navigate = useNavigate();
+  // State hooks to manage component state
+  const [products, setProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
+  const [error, setError] = useState<string | null>(null)
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const navigate = useNavigate()
 
+  // useEffect to fetch products
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const guitars = await getGuitars();
-        const pedals = await getPedals();
-
-        // Combine the lists of guitars and pedals
-        const allProducts = [...guitars, ...pedals];
+        // Fetching guitars and pedals from firebase.ts
+        const guitars = await getGuitars()
+        const pedals = await getPedals()
+        // Combining both arrays into a single array
+        const allProducts = [...guitars, ...pedals]
         
-        setProducts(allProducts);
+        // Setting the products state
+        setProducts(allProducts)
       } catch (error) {
-        console.error('Error fetching products', error);
-        setError('Error fetching products');
+        console.error('Error fetching products', error)
+        setError('Error fetching products')
       } finally {
-        setLoading(false);
+        // Marking loading as false after fetching is complete
+        setLoading(false)
       }
     };
 
-    fetchProducts();
-  }, []); // Fetch products when the component mounts
+    // Calling the fetchProducts function
+    fetchProducts()
+  }, [])
 
+  // useEffect to update the selectedProduct based on the productName prop
   useEffect(() => {
-    // Update selectedProduct when productName changes
-    const productToDisplay = products.find((product) => product.name === productName);
-    setSelectedProduct(productToDisplay || null);
-  }, [products, productName]);
+    // Finding the product with the matching name
+    const productToDisplay = products.find((product) => product.name === productName)
+    // Setting the selectedProduct state
+    setSelectedProduct(productToDisplay || null)
+  }, [products, productName])
 
+  // Render the component based on the state
   return (
     <div className="product-container">
+      {/* Loading message */}
       {loading && <p>Loading...</p>}
+      {/* Error message */}
       {error && <p>{error}</p>}
+      {/* Message when no product is selected */}
       {!loading && !error && !selectedProduct && <p>No product selected</p>}
+      {/* Rendering product information when available */}
       {!loading && !error && selectedProduct && (
         <>
+          {/* Product information */}
           <div className="product-wrapper">
             <div className="product-info">
               <h3>{selectedProduct.name}</h3>
@@ -59,5 +75,5 @@ export const SingleProduct: React.FC<SingleProductProps> = ({ productName }) => 
         </>
       )}
     </div>
-  );
-};
+  )
+}

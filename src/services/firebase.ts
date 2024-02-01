@@ -1,5 +1,6 @@
-import { initializeApp } from 'firebase/app';
-import { getDownloadURL, getStorage, ref } from 'firebase/storage';
+// Import necessary Firebase modules
+import { initializeApp } from 'firebase/app'
+import { getDownloadURL, getStorage, ref } from 'firebase/storage'
 import { 
   collection, 
   getFirestore, 
@@ -7,10 +8,10 @@ import {
   doc, 
   updateDoc, 
   addDoc, 
-} from 'firebase/firestore/lite';
+} from 'firebase/firestore/lite'
 
 
-// Your web app's Firebase configuration
+// Firebase configuration for the app
 const firebaseConfig = {
   apiKey: "AIzaSyABti2RC9qHKlX1nuSrnNK5nTEbExlM-aw",
   authDomain: "emils-gitarr-butik.firebaseapp.com",
@@ -20,14 +21,14 @@ const firebaseConfig = {
   appId: "1:372371680106:web:a4880cf085dad6d3825313",
 };
 
-// Initialize Firebase
-export const app = initializeApp(firebaseConfig);
+// Initialize Firebase app with the provided configuration
+export const app = initializeApp(firebaseConfig)
 
-// init services
+// Initialize Firebase services (Firestore and Storage)
 const db = getFirestore(app)
-
 const storage = getStorage(app)
 
+// Define the structure of a product
 export interface Product{
   id:string,
   name:string,
@@ -48,89 +49,101 @@ export interface Product{
   }
 }
 
-//* GET GUITARS LIST
+// Function to fetch the list of guitars from Firestore
 export async function getGuitars(): Promise<Product[]> {
-  const productRef = collection(db, 'guitars');
-  const productSnapshot = await getDocs(productRef);
+  // Reference to the 'guitars' collection in Firestore
+  const productRef = collection(db, 'guitars')
+  // Fetch product snapshot from Firestore
+  const productSnapshot = await getDocs(productRef)
 
+  // Process each document in the snapshot and fetch additional data
   const productList: Promise<Product>[] = productSnapshot.docs.map(async (doc) => {
     const productData = doc.data() as Product;
-    productData.id = doc.id
+    productData.id = doc.id;
     productData.type = "GUITAR"
 
+    // Fetch image URL from Firebase Storage
     if (productData.imagePaths && typeof productData.imagePaths === 'string') {
       const imagePaths = productData.imagePaths;
 
       try {
-        productData.imageUrl = await getDownloadURL(ref(storage, imagePaths));
+        productData.imageUrl = await getDownloadURL(ref(storage, imagePaths))
       } catch (error) {
-        console.error(`Error fetching image URL for product ${productData.id}:`, error);
+        console.error(`Error fetching image URL for product ${productData.id}:`, error)
       }
     } else {
-      console.error(`Invalid imagePaths for product ${productData.id}`);
+      console.error(`Invalid imagePaths for product ${productData.id}`)
     }
 
+    // Fetch audio URL from Firebase Storage
     if (productData.audioPaths && typeof productData.audioPaths === 'string') {
       const audioPath = productData.audioPaths;
 
       try {
-        productData.audioUrls = await getDownloadURL(ref(storage, audioPath));
+        productData.audioUrls = await getDownloadURL(ref(storage, audioPath))
       } catch (error) {
-        console.error(`Error fetching audio URL for product ${productData.id}:`, error);
+        console.error(`Error fetching audio URL for product ${productData.id}:`, error)
       }
     } else {
-      console.error(`Invalid audioPaths for product ${productData.id}`, productData.audioPaths);
+      console.error(`Invalid audioPaths for product ${productData.id}`, productData.audioPaths)
     }
 
     return productData;
   });
 
-  const resolvedProductList = await Promise.all(productList);
+  // Wait for all promises to resolve and return the list of products
+  const resolvedProductList = await Promise.all(productList)
 
   return resolvedProductList;
 }
 
-//* GET PEDALS LIST
+// Function to fetch the list of pedals from Firestore
 export async function getPedals(): Promise<Product[]> {
-  const productRef = collection(db, 'pedals');
-  const productSnapshot = await getDocs(productRef);
+  // Reference to the 'pedals' collection in Firestore
+  const productRef = collection(db, 'pedals')
+  // Fetch product snapshot from Firestore
+  const productSnapshot = await getDocs(productRef)
 
+  // Process each document in the snapshot and fetch additional data
   const productList: Promise<Product>[] = productSnapshot.docs.map(async (doc) => {
     const productData = doc.data() as Product;
-    productData.id = doc.id
-    productData.type = "PEDAL"
+    productData.id = doc.id;
+    productData.type = "PEDAL";
 
+    // Fetch image URL from Firebase Storage
     if (productData.imagePaths && typeof productData.imagePaths === 'string') {
       const imagePaths = productData.imagePaths;
 
       try {
-        productData.imageUrl = await getDownloadURL(ref(storage, imagePaths));
+        productData.imageUrl = await getDownloadURL(ref(storage, imagePaths))
       } catch (error) {
-        console.error(`Error fetching image URL for product ${productData.id}:`, error);
+        console.error(`Error fetching image URL for product ${productData.id}:`, error)
       }
     } else {
-      console.error(`Invalid imagePaths for product ${productData.id}`);
+      console.error(`Invalid imagePaths for product ${productData.id}`)
     }
 
+    // Fetch audio URL from Firebase Storage
     if (productData.audioPaths && typeof productData.audioPaths === 'string') {
       const audioPath = productData.audioPaths;
 
       try {
-        productData.audioUrls = await getDownloadURL(ref(storage, audioPath));
+        productData.audioUrls = await getDownloadURL(ref(storage, audioPath))
       } catch (error) {
-        console.error(`Error fetching audio URL for product ${productData.id}:`, error);
+        console.error(`Error fetching audio URL for product ${productData.id}:`, error)
       }
     } 
 
     return productData;
-  });
+  })
 
-  const resolvedProductList = await Promise.all(productList);
+  // Wait for all promises to resolve and return the list of products
+  const resolvedProductList = await Promise.all(productList)
 
   return resolvedProductList;
 }
 
-
+// Function to add payment details to the 'orders' collection in Firestore
 export async function addPaymentDetails(paymentDetails:any): Promise<void>{
   try{
     const orderCollection = collection(db,'orders')
@@ -141,29 +154,28 @@ export async function addPaymentDetails(paymentDetails:any): Promise<void>{
   }
 }
 
+// Function to mark a guitar as sold in Firestore
 export async function markGuitarAsSold(productId: string): Promise<void> {
-  const productRef = doc(db, 'guitars', productId);
+  const productRef = doc(db, 'guitars', productId)
 
   try {
-    await updateDoc(productRef, { isSold: true });
-    console.log('Gitarr är markerad som såld!',`${productId}`);
+    await updateDoc(productRef, { isSold: true })
+    console.log('Gitarr är markerad som såld!',`${productId}`)
   } catch (error) {
-    console.error('Misslyckades med att markera gitarr som såld:', error, `${productId}`);
+    console.error('Misslyckades med att markera gitarr som såld:', error, `${productId}`)
     throw error;
   }
 }
 
+// Function to mark a pedal as sold in Firestore
 export async function markPedalAsSold(productId:string): Promise<void> {
-  const productRef = doc(db, 'pedals', productId);
+  const productRef = doc(db, 'pedals', productId)
 
   try {
-    await updateDoc(productRef, { isSold: true });
-    console.log('Pedal är markerad som såld!',`${productId}`);
+    await updateDoc(productRef, { isSold: true })
+    console.log('Pedal är markerad som såld!',`${productId}`)
   } catch (error) {
-    console.error('Misslyckades med att markera pedal som såld:', error, `${productId}`);
+    console.error('Misslyckades med att markera pedal som såld:', error, `${productId}`)
     throw error;
   }
 }
-
-
-

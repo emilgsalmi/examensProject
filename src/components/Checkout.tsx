@@ -1,4 +1,4 @@
-// Checkout.tsx
+// Importing React, necessary hooks, services, and styles
 import React, { useState } from 'react'
 import { useCart } from '../contexts/CartContext'
 import { CheckoutService } from '../services/CheckoutService'
@@ -6,29 +6,34 @@ import { addPaymentDetails, markGuitarAsSold, markPedalAsSold } from '../service
 import "../styles/components/checkout/checkout.style.scss"
 import { useNavigate } from 'react-router-dom'
 
-
+// Interface for Checkout component props
 interface CheckoutSectionProps {
   totalSum: number;
 }
 
+// Checkout component
 export const Checkout: React.FC<CheckoutSectionProps> = ({ totalSum }) => {
-  const { cart } = useCart();
+  // Using the CartContext to access cart state and emptyCart function
+  const { cart, emptyCart } = useCart()
+  // Hook to navigate to different routes
   const navigate = useNavigate()
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [address, setAddress] = useState('');
-  const [phone, setPhone] = useState('');
-  const [postalCode, setPostalCode] = useState('');
-  const [country, setCountry] = useState('');
-  const [cardNumber, setCardNumber] = useState('');
-  const [expiryDate, setExpiryDate] = useState('');
-  const [cvv, setCVV] = useState('');
 
-  const { emptyCart } = useCart()
-  
+  // State variables to store user input for payment details
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [email, setEmail] = useState('')
+  const [address, setAddress] = useState('')
+  const [phone, setPhone] = useState('')
+  const [postalCode, setPostalCode] = useState('')
+  const [country, setCountry] = useState('')
+  const [cardNumber, setCardNumber] = useState('')
+  const [expiryDate, setExpiryDate] = useState('')
+  const [cvv, setCVV] = useState('')
+
+  // Function to handle the checkout process
   const handleCheckout = async () => {
-    // Skapa ett objekt med betalningsinformationen
+
+    // Create an object with payment information
     const paymentDetails = {
       firstName,
       lastName,
@@ -42,15 +47,16 @@ export const Checkout: React.FC<CheckoutSectionProps> = ({ totalSum }) => {
       cardNumber,
       expiryDate,
       cvv,
-    };
+    }
 
-    // Använd fake checkout-service för att simulera betalningen
+    // Simulate payment using a "checkout service"
     const result = await CheckoutService.processPayment(paymentDetails)
 
-    // Logga resultatet av den simulerade betalningen
+    // Log the result of the simulated payment and all payment details
     console.log("Result of payment: ",result)
     console.log("All info: ", paymentDetails)
     
+    // If the payment is successful, update the database, navigate to confirmation page, and empty the cart
     if (result.success){
         try{
             await addPaymentDetails(paymentDetails)
@@ -60,9 +66,7 @@ export const Checkout: React.FC<CheckoutSectionProps> = ({ totalSum }) => {
                 if(type === 'GUITAR') return markGuitarAsSold(productId)
                 if(type === 'PEDAL') return markPedalAsSold(productId)
             }))
-            /* await Promise.all(cart.map(product => markGuitarAsSold(product.product.id)))
-            await Promise.all(cart.map(product => markPedalAsSold(product.product.id))) */
-
+            
             navigate('/conformation')
             emptyCart()
             console.log('Betalningsinformationen har lagts till i databasen')
@@ -73,7 +77,7 @@ export const Checkout: React.FC<CheckoutSectionProps> = ({ totalSum }) => {
         }
     }
 
-    // Återställ formuläret eller gör annat som behövs efter betalningen
+    // Reset the form or take other actions needed after payment
     setFirstName('')
     setLastName('')
     setEmail('')
@@ -84,15 +88,19 @@ export const Checkout: React.FC<CheckoutSectionProps> = ({ totalSum }) => {
     setCardNumber('')
     setExpiryDate('')
     setCVV('')
-  };
+  }
 
   
+  // Render the Checkout component
   return (
     <div className="checkout-section">
         <h3>Checkout</h3>
+      {/* Form for user to input checkout details */}
       <form className='checkout-wrapper'>
+        {/* Section for customer details */}
         <div className='info-details'>
             <h3>Kunduppgifter</h3>
+            {/* Input fields for customer details */}
             <div>
                 <label>Förnamn:</label>
                 <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
@@ -123,9 +131,11 @@ export const Checkout: React.FC<CheckoutSectionProps> = ({ totalSum }) => {
             </div>
         </div>
 
+        {/* Section for card payment details */}
         <div className='card-details'>
             <h3>Kortbetalning</h3>
             <p style={{color:'lightgrey'}}>annan betallösning kommer innom kort</p>
+            {/* Input fields for card payment details */}
             <div>
                 <label>Kortnummer:</label>
                 <input type="text" value={cardNumber} onChange={(e) => setCardNumber(e.target.value)} />
@@ -140,12 +150,14 @@ export const Checkout: React.FC<CheckoutSectionProps> = ({ totalSum }) => {
             </div>
         </div>
 
+        {/* Displaying the total sum of the items in the cart */}
         <p>Totalt: {totalSum}kr</p>
 
+        {/* Button to initiate the checkout process */}
         <button className='button' type="button" onClick={handleCheckout}>
           Betala
         </button>
       </form>
     </div>
-  );
-};
+  )
+}

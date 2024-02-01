@@ -1,82 +1,49 @@
-// SingleProductPage.tsx
-import React, { useEffect, useState } from 'react';
-import { getGuitars, getPedals } from '../services/firebase';
-import { SingleProduct } from '../components/singleProduct';
-import { DocumentData } from 'firebase/firestore';
+// Importing React and components and services
+import React, { useEffect, useState } from 'react'
+import { getGuitars, getPedals } from '../services/firebase'
+import { SingleProduct } from '../components/singleProduct'
+import { DocumentData } from 'firebase/firestore'
 
+// SingleProductPage component
 export const ShowProduct: React.FC = () => {
-  const [product, setProduct] = useState<DocumentData | null>(null);
 
+  // State to store the product data
+  const [product, setProduct] = useState<DocumentData | null>(null)
+
+  // useEffect to fetch products when the component mounts
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const guitars = await getGuitars();
-        const pedals = await getPedals();
+        // Fetching lists of guitars and pedals using the services/firebase functions
+        const guitars = await getGuitars()
+        const pedals = await getPedals()
 
         // Combine the lists of guitars and pedals
-        const allProducts = [...guitars, ...pedals];
+        const allProducts = [...guitars, ...pedals]
 
-        setProduct(allProducts); 
+        // Setting the combined product list to the state
+        setProduct(allProducts)
       } catch (error) {
-        console.error('Error fetching products', error);
+        console.error('Error fetching products', error)
       }
-    };
+    }
 
-    fetchProducts();
-  }, []);
+    // Calling the fetchProducts function when the component mounts
+    fetchProducts()
+  }, [])
 
+  // Render the SingleProductPage component
   return (
     <div>
       <h2>Product Page</h2>
+      {/* Conditional rendering based on whether the product data is available */}
       {product ? (
+        // Rendering the SingleProduct component with the productName prop
         <SingleProduct productName={product.name} />
       ) : (
+        // Displaying a message if the product is not found
         <p>Product not found</p>
       )}
     </div>
-  );
-};
-
-
-
-/* // ProductPage.tsx
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { getProducts } from '../services/firebase';
-import { SingleProduct } from '../components/singleProduct';
-import { ProductProps } from '../components/singleProduct';
-
-export const SingleProductPage: React.FC = () => {
-  const { productName } = useParams();
-  const [product, setProduct] = useState<ProductProps | null>(null);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const productList = await getProducts();
-        const selectedProduct = productList.find((product) => product.name === productName);
-        setProduct(selectedProduct || null);
-      } catch (error) {
-        console.error('Error fetching product', error);
-      }
-    };
-
-    fetchProduct();
-  }, [productName]);
-
-  return (
-    <div>
-      <h2>Product Page</h2>
-      {product ? (
-        <SingleProduct productName={product.name} />
-      ) : (
-        <p>Product not found</p>
-      )}
-      <button className="to-product" onClick={() => navigate(`/product/${productName}`)}>
-        Till Produkten
-      </button>
-    </div>
-  );
-}; */
-
+  )
+}
